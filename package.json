@@ -29,7 +29,7 @@
   "dependencies": {
     "chalk": "^2.4.1",
     "he": "^1.1.1",
-    "@ngx-i18nsupport/ngx-i18nsupport-lib": "^1.12.1",
+    "@ngx-i18nsupport/ngx-i18nsupport-lib": "file:../ngx-i18nsupport-lib",
     "request": "^2.85.0",
     "tslib": "^2.0.0"
   },

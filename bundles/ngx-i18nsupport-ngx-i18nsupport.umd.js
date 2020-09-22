@@ -1979,6 +1979,7 @@
             }
         };
         XliffMerge.parseArgs = function (argv) {
+            var _a;
             var options = {
                 languages: []
             };
@@ -2004,6 +2005,22 @@
                 else if (arg === '--quiet' || arg === '-q') {
                     options.quiet = true;
                 }
+                else if (arg === '--language' || arg === '-l') {
+                    i++;
+                    if (i >= argv.length) {
+                        console.log('missing language');
+                        return null;
+                    }
+                    else {
+                        if (argv[i].indexOf(',') !== -1) {
+                            var newLocal = argv[i].split(',');
+                            (_a = options.languages).push.apply(_a, __spread(newLocal));
+                        }
+                        else {
+                            options.languages.push(argv[i]);
+                        }
+                    }
+                }
                 else if (arg === '--help' || arg === '-help' || arg === '-h') {
                     XliffMerge.showUsage();
                 }
@@ -2012,7 +2029,7 @@
                     return null;
                 }
                 else {
-                    options.languages.push(arg);
+                    //options.languages.push(arg);
                 }
             }
             return options;

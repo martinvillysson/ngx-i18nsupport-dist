@@ -60,6 +60,22 @@ class XliffMerge {
             else if (arg === '--quiet' || arg === '-q') {
                 options.quiet = true;
             }
+            else if (arg === '--language' || arg === '-l') {
+                i++;
+                if (i >= argv.length) {
+                    console.log('missing language');
+                    return null;
+                }
+                else {
+                    if (argv[i].indexOf(',') !== -1) {
+                        const newLocal = argv[i].split(',');
+                        options.languages.push(...newLocal);
+                    }
+                    else {
+                        options.languages.push(argv[i]);
+                    }
+                }
+            }
             else if (arg === '--help' || arg === '-help' || arg === '-h') {
                 XliffMerge.showUsage();
             }
@@ -68,7 +84,7 @@ class XliffMerge {
                 return null;
             }
             else {
-                options.languages.push(arg);
+                //options.languages.push(arg);
             }
         }
         return options;
