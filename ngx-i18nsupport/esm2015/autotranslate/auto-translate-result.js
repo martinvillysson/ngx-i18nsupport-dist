@@ -1,0 +1,13 @@
+/**
+ * Created by martin on 29.06.2017.
+ */
+export class AutoTranslateResult {
+    constructor(_success, _details) {
+        this._success = _success;
+        this._details = _details;
+    }
+    success() {
+        return this._success;
+    }
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYXV0by10cmFuc2xhdGUtcmVzdWx0LmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vcHJvamVjdHMveGxpZmZtZXJnZS9zcmMvYXV0b3RyYW5zbGF0ZS9hdXRvLXRyYW5zbGF0ZS1yZXN1bHQudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7O0dBRUc7QUFFSCxNQUFNLE9BQU8sbUJBQW1CO0lBRTlCLFlBQW9CLFFBQWlCLEVBQVUsUUFBZ0I7UUFBM0MsYUFBUSxHQUFSLFFBQVEsQ0FBUztRQUFVLGFBQVEsR0FBUixRQUFRLENBQVE7SUFFL0QsQ0FBQztJQUVNLE9BQU87UUFDWixPQUFPLElBQUksQ0FBQyxRQUFRLENBQUM7SUFDdkIsQ0FBQztDQUNGIiwic291cmNlc0NvbnRlbnQiOlsiLyoqXHJcbiAqIENyZWF0ZWQgYnkgbWFydGluIG9uIDI5LjA2LjIwMTcuXHJcbiAqL1xyXG5cclxuZXhwb3J0IGNsYXNzIEF1dG9UcmFuc2xhdGVSZXN1bHQge1xyXG5cclxuICBjb25zdHJ1Y3Rvcihwcml2YXRlIF9zdWNjZXNzOiBib29sZWFuLCBwcml2YXRlIF9kZXRhaWxzOiBzdHJpbmcpIHtcclxuXHJcbiAgfVxyXG5cclxuICBwdWJsaWMgc3VjY2VzcygpOiBib29sZWFuIHtcclxuICAgIHJldHVybiB0aGlzLl9zdWNjZXNzO1xyXG4gIH1cclxufVxyXG4iXX0=

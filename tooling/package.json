@@ -1,0 +1,46 @@
+{
+  "name": "@ngx-i18nsupport/tooling",
+  "version": "8.0.3",
+  "private": true,
+  "description": "Schematics to add the tooling to be used with the Angular 2 i18n workflow",
+  "schematics": "./src/schematics/src/collection.json",
+  "ng-update": {
+    "migrations": "./src/schematics/src/migration-collection.json"
+  },
+  "builders": "./src/builders/src/builders.json",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martinroob/ngx-i18nsupport.git"
+  },
+  "keywords": [
+    "i18n",
+    "tooling",
+    "angular",
+    "xliff",
+    "xmb"
+  ],
+  "author": "Martin Roob <martinroob65@gmail.com> (www.roobsoft.de)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/martinroob/ngx-i18nsupport/issues"
+  },
+  "homepage": "https://github.com/martinroob/ngx-i18nsupport#readme",
+  "dependencies": {
+    "@ngx-i18nsupport/ngx-i18nsupport": "^1.1.6",
+    "tslib": "^2.0.0"
+  },
+  "peerDependencies": {
+    "@angular/common": "^8.0.0",
+    "@angular/core": "^8.0.0"
+  },
+  "main": "bundles/ngx-i18nsupport-tooling.umd.js",
+  "module": "fesm2015/ngx-i18nsupport-tooling.js",
+  "es2015": "fesm2015/ngx-i18nsupport-tooling.js",
+  "esm2015": "esm2015/ngx-i18nsupport-tooling.js",
+  "fesm2015": "fesm2015/ngx-i18nsupport-tooling.js",
+  "typings": "ngx-i18nsupport-tooling.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "prepublishOnly": "node --eval \"console.error('ERROR: Trying to publish a package that has been compiled by Ivy. This is not allowed.\\nPlease delete and rebuild the package, without compiling with Ivy, before attempting to publish.\\n')\" && exit 1"
+  }
+}
