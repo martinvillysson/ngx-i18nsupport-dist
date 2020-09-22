@@ -614,6 +614,9 @@ class XliffMergeParameters {
         const xliffmergeOptions = profileContent.xliffmergeOptions;
         xliffmergeOptions.srcDir = this.adjustPathToProfilePath(profilePath, xliffmergeOptions.srcDir);
         xliffmergeOptions.genDir = this.adjustPathToProfilePath(profilePath, xliffmergeOptions.genDir);
+        if (xliffmergeOptions.optionalMasterFilePath) {
+            xliffmergeOptions.optionalMasterFilePath = this.adjustPathToProfilePath(profilePath, xliffmergeOptions.optionalMasterFilePath);
+        }
         xliffmergeOptions.apikeyfile = this.adjustPathToProfilePath(profilePath, xliffmergeOptions.apikeyfile);
         return profileContent;
     }
@@ -655,6 +658,9 @@ class XliffMergeParameters {
             if (profile.genDir) {
                 // this must be after angularCompilerOptions to be preferred
                 this._genDir = profile.genDir;
+            }
+            if (profile.optionalMasterFilePath) {
+                this._optionalMasterFilePath = profile.optionalMasterFilePath;
             }
             if (profile.i18nBaseFile) {
                 this._i18nBaseFile = profile.i18nBaseFile;
@@ -796,6 +802,17 @@ class XliffMergeParameters {
     allowIdChange() {
         return (isNullOrUndefined(this._allowIdChange)) ? false : this._allowIdChange;
     }
+    optionalMasterFilePath(lang) {
+        if (lang) {
+            if (this._optionalMasterFilePath) {
+                return this._optionalMasterFilePath.replace(`.${this.i18nFormat()}`, `.${lang}.${this.i18nFormat()}`);
+            }
+            return null;
+        }
+        else {
+            return this._optionalMasterFilePath;
+        }
+    }
     verbose() {
         return (isNullOrUndefined(this._verbose)) ? false : this._verbose;
     }
@@ -811,6 +828,7 @@ class XliffMergeParameters {
         commandOutput.debug('defaultLanguage:\t"%s"', this.defaultLanguage());
         commandOutput.debug('srcDir:\t"%s"', this.srcDir());
         commandOutput.debug('genDir:\t"%s"', this.genDir());
+        commandOutput.debug('optionalMasterFilePath:\t"%s"', this.optionalMasterFilePath());
         commandOutput.debug('i18nBaseFile:\t"%s"', this.i18nBaseFile());
         commandOutput.debug('i18nFile:\t"%s"', this.i18nFile());
         commandOutput.debug('languages:\t%s', this.languages());
@@ -1820,7 +1838,11 @@ class XliffMerge {
         const isDefaultLang = (lang === this.parameters.defaultLanguage());
         this.master.setNewTransUnitTargetPraefix(this.parameters.targetPraefix());
         this.master.setNewTransUnitTargetSuffix(this.parameters.targetSuffix());
-        const languageSpecificMessagesFile = this.master.createTranslationFileForLang(lang, languageXliffFilePath, isDefaultLang, this.parameters.useSourceAsTarget());
+        let optionalMaster;
+        if (this.parameters.optionalMasterFilePath(lang)) {
+            optionalMaster = TranslationMessagesFileReader.masterFileContent(this.parameters.optionalMasterFilePath(lang), this.parameters.encoding());
+        }
+        const languageSpecificMessagesFile = this.master.createTranslationFileForLang(lang, languageXliffFilePath, isDefaultLang, this.parameters.useSourceAsTarget(), optionalMaster);
         return this.autoTranslate(this.master.sourceLanguage(), lang, languageSpecificMessagesFile).pipe(map(( /* summary */) => {
             // write it to file
             TranslationMessagesFileReader.save(languageSpecificMessagesFile, this.parameters.beautifyOutput());
@@ -1851,7 +1873,7 @@ class XliffMerge {
      */
     mergeMasterTo(lang, languageXliffFilePath) {
         // read lang specific file
-        const languageSpecificMessagesFile = TranslationMessagesFileReader.fromFile(this.translationFormat(this.parameters.i18nFormat()), languageXliffFilePath, this.parameters.encoding());
+        const languageSpecificMessagesFile = TranslationMessagesFileReader.fromFile(this.translationFormat(this.parameters.i18nFormat()), languageXliffFilePath, this.parameters.encoding(), this.parameters.optionalMasterFilePath(lang));
         const isDefaultLang = (lang === this.parameters.defaultLanguage());
         let newCount = 0;
         let correctSourceContentCount = 0;

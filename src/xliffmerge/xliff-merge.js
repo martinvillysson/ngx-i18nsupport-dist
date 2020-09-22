@@ -273,7 +273,11 @@ class XliffMerge {
         const isDefaultLang = (lang === this.parameters.defaultLanguage());
         this.master.setNewTransUnitTargetPraefix(this.parameters.targetPraefix());
         this.master.setNewTransUnitTargetSuffix(this.parameters.targetSuffix());
-        const languageSpecificMessagesFile = this.master.createTranslationFileForLang(lang, languageXliffFilePath, isDefaultLang, this.parameters.useSourceAsTarget());
+        let optionalMaster;
+        if (this.parameters.optionalMasterFilePath(lang)) {
+            optionalMaster = translation_messages_file_reader_1.TranslationMessagesFileReader.masterFileContent(this.parameters.optionalMasterFilePath(lang), this.parameters.encoding());
+        }
+        const languageSpecificMessagesFile = this.master.createTranslationFileForLang(lang, languageXliffFilePath, isDefaultLang, this.parameters.useSourceAsTarget(), optionalMaster);
         return this.autoTranslate(this.master.sourceLanguage(), lang, languageSpecificMessagesFile).pipe(operators_1.map(( /* summary */) => {
             // write it to file
             translation_messages_file_reader_1.TranslationMessagesFileReader.save(languageSpecificMessagesFile, this.parameters.beautifyOutput());
@@ -304,7 +308,7 @@ class XliffMerge {
      */
     mergeMasterTo(lang, languageXliffFilePath) {
         // read lang specific file
-        const languageSpecificMessagesFile = translation_messages_file_reader_1.TranslationMessagesFileReader.fromFile(this.translationFormat(this.parameters.i18nFormat()), languageXliffFilePath, this.parameters.encoding());
+        const languageSpecificMessagesFile = translation_messages_file_reader_1.TranslationMessagesFileReader.fromFile(this.translationFormat(this.parameters.i18nFormat()), languageXliffFilePath, this.parameters.encoding(), this.parameters.optionalMasterFilePath(lang));
         const isDefaultLang = (lang === this.parameters.defaultLanguage());
         let newCount = 0;
         let correctSourceContentCount = 0;

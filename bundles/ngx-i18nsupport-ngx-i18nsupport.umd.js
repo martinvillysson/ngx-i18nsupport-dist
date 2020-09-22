@@ -966,6 +966,9 @@
             var xliffmergeOptions = profileContent.xliffmergeOptions;
             xliffmergeOptions.srcDir = this.adjustPathToProfilePath(profilePath, xliffmergeOptions.srcDir);
             xliffmergeOptions.genDir = this.adjustPathToProfilePath(profilePath, xliffmergeOptions.genDir);
+            if (xliffmergeOptions.optionalMasterFilePath) {
+                xliffmergeOptions.optionalMasterFilePath = this.adjustPathToProfilePath(profilePath, xliffmergeOptions.optionalMasterFilePath);
+            }
             xliffmergeOptions.apikeyfile = this.adjustPathToProfilePath(profilePath, xliffmergeOptions.apikeyfile);
             return profileContent;
         };
@@ -1007,6 +1010,9 @@
                 if (profile.genDir) {
                     // this must be after angularCompilerOptions to be preferred
                     this._genDir = profile.genDir;
+                }
+                if (profile.optionalMasterFilePath) {
+                    this._optionalMasterFilePath = profile.optionalMasterFilePath;
                 }
                 if (profile.i18nBaseFile) {
                     this._i18nBaseFile = profile.i18nBaseFile;
@@ -1149,6 +1155,17 @@
         XliffMergeParameters.prototype.allowIdChange = function () {
             return (isNullOrUndefined(this._allowIdChange)) ? false : this._allowIdChange;
         };
+        XliffMergeParameters.prototype.optionalMasterFilePath = function (lang) {
+            if (lang) {
+                if (this._optionalMasterFilePath) {
+                    return this._optionalMasterFilePath.replace("." + this.i18nFormat(), "." + lang + "." + this.i18nFormat());
+                }
+                return null;
+            }
+            else {
+                return this._optionalMasterFilePath;
+            }
+        };
         XliffMergeParameters.prototype.verbose = function () {
             return (isNullOrUndefined(this._verbose)) ? false : this._verbose;
         };
@@ -1165,6 +1182,7 @@
             commandOutput.debug('defaultLanguage:\t"%s"', this.defaultLanguage());
             commandOutput.debug('srcDir:\t"%s"', this.srcDir());
             commandOutput.debug('genDir:\t"%s"', this.genDir());
+            commandOutput.debug('optionalMasterFilePath:\t"%s"', this.optionalMasterFilePath());
             commandOutput.debug('i18nBaseFile:\t"%s"', this.i18nBaseFile());
             commandOutput.debug('i18nFile:\t"%s"', this.i18nFile());
             commandOutput.debug('languages:\t%s', this.languages());
@@ -2224,7 +2242,11 @@
             var isDefaultLang = (lang === this.parameters.defaultLanguage());
             this.master.setNewTransUnitTargetPraefix(this.parameters.targetPraefix());
             this.master.setNewTransUnitTargetSuffix(this.parameters.targetSuffix());
-            var languageSpecificMessagesFile = this.master.createTranslationFileForLang(lang, languageXliffFilePath, isDefaultLang, this.parameters.useSourceAsTarget());
+            var optionalMaster;
+            if (this.parameters.optionalMasterFilePath(lang)) {
+                optionalMaster = TranslationMessagesFileReader.masterFileContent(this.parameters.optionalMasterFilePath(lang), this.parameters.encoding());
+            }
+            var languageSpecificMessagesFile = this.master.createTranslationFileForLang(lang, languageXliffFilePath, isDefaultLang, this.parameters.useSourceAsTarget(), optionalMaster);
             return this.autoTranslate(this.master.sourceLanguage(), lang, languageSpecificMessagesFile).pipe(operators.map(function ( /* summary */) {
                 // write it to file
                 TranslationMessagesFileReader.save(languageSpecificMessagesFile, _this.parameters.beautifyOutput());
@@ -2256,7 +2278,7 @@
         XliffMerge.prototype.mergeMasterTo = function (lang, languageXliffFilePath) {
             var _this = this;
             // read lang specific file
-            var languageSpecificMessagesFile = TranslationMessagesFileReader.fromFile(this.translationFormat(this.parameters.i18nFormat()), languageXliffFilePath, this.parameters.encoding());
+            var languageSpecificMessagesFile = TranslationMessagesFileReader.fromFile(this.translationFormat(this.parameters.i18nFormat()), languageXliffFilePath, this.parameters.encoding(), this.parameters.optionalMasterFilePath(lang));
             var isDefaultLang = (lang === this.parameters.defaultLanguage());
             var newCount = 0;
             var correctSourceContentCount = 0;

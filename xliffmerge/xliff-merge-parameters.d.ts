@@ -17,6 +17,7 @@ export declare class XliffMergeParameters {
     private _i18nFile;
     private _i18nFormat;
     private _encoding;
+    private _optionalMasterFilePath;
     private _genDir;
     private _languages;
     private _removeUnusedIds;
@@ -74,6 +75,7 @@ export declare class XliffMergeParameters {
      */
     private checkLanguageSyntax;
     allowIdChange(): boolean;
+    optionalMasterFilePath(lang?: string): string;
     verbose(): boolean;
     quiet(): boolean;
     /**

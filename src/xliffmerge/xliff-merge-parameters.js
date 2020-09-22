@@ -113,6 +113,9 @@ class XliffMergeParameters {
         const xliffmergeOptions = profileContent.xliffmergeOptions;
         xliffmergeOptions.srcDir = this.adjustPathToProfilePath(profilePath, xliffmergeOptions.srcDir);
         xliffmergeOptions.genDir = this.adjustPathToProfilePath(profilePath, xliffmergeOptions.genDir);
+        if (xliffmergeOptions.optionalMasterFilePath) {
+            xliffmergeOptions.optionalMasterFilePath = this.adjustPathToProfilePath(profilePath, xliffmergeOptions.optionalMasterFilePath);
+        }
         xliffmergeOptions.apikeyfile = this.adjustPathToProfilePath(profilePath, xliffmergeOptions.apikeyfile);
         return profileContent;
     }
@@ -154,6 +157,9 @@ class XliffMergeParameters {
             if (profile.genDir) {
                 // this must be after angularCompilerOptions to be preferred
                 this._genDir = profile.genDir;
+            }
+            if (profile.optionalMasterFilePath) {
+                this._optionalMasterFilePath = profile.optionalMasterFilePath;
             }
             if (profile.i18nBaseFile) {
                 this._i18nBaseFile = profile.i18nBaseFile;
@@ -295,6 +301,17 @@ class XliffMergeParameters {
     allowIdChange() {
         return (util_2.isNullOrUndefined(this._allowIdChange)) ? false : this._allowIdChange;
     }
+    optionalMasterFilePath(lang) {
+        if (lang) {
+            if (this._optionalMasterFilePath) {
+                return this._optionalMasterFilePath.replace(`.${this.i18nFormat()}`, `.${lang}.${this.i18nFormat()}`);
+            }
+            return null;
+        }
+        else {
+            return this._optionalMasterFilePath;
+        }
+    }
     verbose() {
         return (util_2.isNullOrUndefined(this._verbose)) ? false : this._verbose;
     }
@@ -310,6 +327,7 @@ class XliffMergeParameters {
         commandOutput.debug('defaultLanguage:\t"%s"', this.defaultLanguage());
         commandOutput.debug('srcDir:\t"%s"', this.srcDir());
         commandOutput.debug('genDir:\t"%s"', this.genDir());
+        commandOutput.debug('optionalMasterFilePath:\t"%s"', this.optionalMasterFilePath());
         commandOutput.debug('i18nBaseFile:\t"%s"', this.i18nBaseFile());
         commandOutput.debug('i18nFile:\t"%s"', this.i18nFile());
         commandOutput.debug('languages:\t%s', this.languages());

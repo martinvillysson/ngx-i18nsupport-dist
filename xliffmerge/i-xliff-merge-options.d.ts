@@ -28,6 +28,7 @@ export interface IXliffMergeOptions {
     i18nFile?: string;
     i18nFormat?: string;
     encoding?: string;
+    optionalMasterFilePath?: string;
     genDir?: string;
     angularCompilerOptions?: {
         genDir?: string;

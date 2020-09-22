@@ -17,6 +17,10 @@
           "description": "directory, where files are written to (normally identical with srcDir) (default \".\")",
           "type": "string"
         },
+        "optionalMasterFilePath":{
+          "description": "path to a master language file",
+          "type": "string"
+        },
         "i18nFile": {
           "description": "master file (relativ to srcDir) (default \"messages.xlf\")",
           "type": "string"
