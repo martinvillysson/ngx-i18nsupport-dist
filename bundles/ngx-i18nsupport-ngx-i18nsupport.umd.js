@@ -2260,8 +2260,9 @@
             this.master.setNewTransUnitTargetPraefix(this.parameters.targetPraefix());
             this.master.setNewTransUnitTargetSuffix(this.parameters.targetSuffix());
             var optionalMaster;
-            if (this.parameters.optionalMasterFilePath(lang)) {
-                optionalMaster = TranslationMessagesFileReader.masterFileContent(this.parameters.optionalMasterFilePath(lang), this.parameters.encoding());
+            var optionalMasterFilePath = isDefaultLang ? this.parameters.optionalMasterFilePath() : this.parameters.optionalMasterFilePath(lang);
+            if (optionalMasterFilePath) {
+                optionalMaster = TranslationMessagesFileReader.masterFileContent(optionalMasterFilePath, this.parameters.encoding());
             }
             var languageSpecificMessagesFile = this.master.createTranslationFileForLang(lang, languageXliffFilePath, isDefaultLang, this.parameters.useSourceAsTarget(), optionalMaster);
             return this.autoTranslate(this.master.sourceLanguage(), lang, languageSpecificMessagesFile).pipe(operators.map(function ( /* summary */) {
@@ -2294,9 +2295,10 @@
          */
         XliffMerge.prototype.mergeMasterTo = function (lang, languageXliffFilePath) {
             var _this = this;
-            // read lang specific file
-            var languageSpecificMessagesFile = TranslationMessagesFileReader.fromFile(this.translationFormat(this.parameters.i18nFormat()), languageXliffFilePath, this.parameters.encoding(), this.parameters.optionalMasterFilePath(lang));
             var isDefaultLang = (lang === this.parameters.defaultLanguage());
+            var optionalMasterFilePath = isDefaultLang ? this.parameters.optionalMasterFilePath() : this.parameters.optionalMasterFilePath(lang);
+            // read lang specific file
+            var languageSpecificMessagesFile = TranslationMessagesFileReader.fromFile(this.translationFormat(this.parameters.i18nFormat()), languageXliffFilePath, this.parameters.encoding(), optionalMasterFilePath);
             var newCount = 0;
             var correctSourceContentCount = 0;
             var correctSourceRefCount = 0;

@@ -290,8 +290,9 @@ class XliffMerge {
         this.master.setNewTransUnitTargetPraefix(this.parameters.targetPraefix());
         this.master.setNewTransUnitTargetSuffix(this.parameters.targetSuffix());
         let optionalMaster;
-        if (this.parameters.optionalMasterFilePath(lang)) {
-            optionalMaster = translation_messages_file_reader_1.TranslationMessagesFileReader.masterFileContent(this.parameters.optionalMasterFilePath(lang), this.parameters.encoding());
+        const optionalMasterFilePath = isDefaultLang ? this.parameters.optionalMasterFilePath() : this.parameters.optionalMasterFilePath(lang);
+        if (optionalMasterFilePath) {
+            optionalMaster = translation_messages_file_reader_1.TranslationMessagesFileReader.masterFileContent(optionalMasterFilePath, this.parameters.encoding());
         }
         const languageSpecificMessagesFile = this.master.createTranslationFileForLang(lang, languageXliffFilePath, isDefaultLang, this.parameters.useSourceAsTarget(), optionalMaster);
         return this.autoTranslate(this.master.sourceLanguage(), lang, languageSpecificMessagesFile).pipe(operators_1.map(( /* summary */) => {
@@ -323,9 +324,10 @@ class XliffMerge {
      * @param languageXliffFilePath filename
      */
     mergeMasterTo(lang, languageXliffFilePath) {
-        // read lang specific file
-        const languageSpecificMessagesFile = translation_messages_file_reader_1.TranslationMessagesFileReader.fromFile(this.translationFormat(this.parameters.i18nFormat()), languageXliffFilePath, this.parameters.encoding(), this.parameters.optionalMasterFilePath(lang));
         const isDefaultLang = (lang === this.parameters.defaultLanguage());
+        const optionalMasterFilePath = isDefaultLang ? this.parameters.optionalMasterFilePath() : this.parameters.optionalMasterFilePath(lang);
+        // read lang specific file
+        const languageSpecificMessagesFile = translation_messages_file_reader_1.TranslationMessagesFileReader.fromFile(this.translationFormat(this.parameters.i18nFormat()), languageXliffFilePath, this.parameters.encoding(), optionalMasterFilePath);
         let newCount = 0;
         let correctSourceContentCount = 0;
         let correctSourceRefCount = 0;
