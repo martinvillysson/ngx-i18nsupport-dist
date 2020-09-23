@@ -94,6 +94,7 @@ The following list shows all allowed content (every value is optional, there is 
     "i18nBaseFile": "messages",
     "i18nFormat": "xlf",
     "encoding": "UTF-8",
+    "optionalMasterFilePath": "./messages.xlf"
     "defaultLanguage": "en",
     "languages": ["en", "de"],
     "removeUnusedIds": true,
