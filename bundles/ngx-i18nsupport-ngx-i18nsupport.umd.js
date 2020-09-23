@@ -2307,6 +2307,11 @@
             var lastProcessedUnit = null;
             this.master.forEachTransUnit(function (masterTransUnit) {
                 var transUnit = languageSpecificMessagesFile.transUnitWithId(masterTransUnit.id);
+                var optionalTransUnit = languageSpecificMessagesFile.optionalMasterTransUnitWithId(masterTransUnit.id);
+                if (!transUnit && optionalTransUnit) {
+                    // If we dont have a transunit in the language file but there is one in the language master file we use the language master one instead.
+                    transUnit = optionalTransUnit;
+                }
                 if (!transUnit) {
                     // oops, no translation, must be a new key, so add it
                     var newUnit = void 0;
